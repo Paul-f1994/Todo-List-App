@@ -1,5 +1,18 @@
 <!doctype html>
 <html lang="en">
+<style>
+    .div-col {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+    .title {
+        flex-grow:8
+    }
+    .due {
+        flex-grow:1
+    }
+</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -16,8 +29,16 @@
     <hr>
     <form action="/add" method="post">
         <div class="form-group">
-            <label for="title">Todo Title</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Todo..."><br>
+            <div class='div-col'>
+                <div class="title">
+                    <label for="title">Todo Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter Todo..."><br>
+                </div>
+                <div class="due">
+                    <label for="due">Due</label>
+                    <input type="text" class="form-control" id="due" name="due" placeholder="Optional"><br>
+                </div>
+            </div>
             <button type="submit" class="btn btn-danger">Add</button>
         </div>
     </form>
@@ -33,11 +54,11 @@
                 <th scope="col">Title</th>
                 <th scope="col">Status</th>
                 <th scope="col">Update</th>
+                <th scope="col">Due</th>
                 <th scope="col">Delete</th>
             </tr>
             </thead>
             <tbody>
-
             {% for todo in todo_list %}
                 <tr>
                     <th scope="row">{{ todo.id }}</th>
@@ -48,6 +69,7 @@
                         <td><span class="badge badge-success">Completed</span></td>
                     {% endif %}
                     <td><a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a></td>
+                    <th scope="row">{{ todo.due }}</th>
                     <td><a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a></td>
                 </tr>
             {% endfor %}

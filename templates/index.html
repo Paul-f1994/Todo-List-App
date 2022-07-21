@@ -47,6 +47,11 @@
                         <label for="title">Todo Title</label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="Enter Todo..."><br>
                     </div>
+                    <div class="priority">
+                        <label for="priority">Priority</label>
+                        <input type="number" min="0" class="form-control" id="priority" name="priority"
+                            placeholder="3"><br>
+                    </div>
                     <div class="category">
                         <label for="category">Category</label>
                         <input type="text" class="form-control" id="category" name="category"
@@ -68,6 +73,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">Priority</th>
                     <th scope="col">Title</th>
                     <th scope="col">Status</th>
                     <th scope="col">Update</th>
@@ -84,7 +90,10 @@
                 <tbody>
                     {% for todo in todo_list %}
                         <tr style="background-color: {{bg_color}}">
-                            <form action="/updateTitleAndDueAndCategory/{{ todo.id }}" method="post">
+                            <form action="/updateAll/{{ todo.id }}" method="post">
+                                <td width="5%">
+                                    <input type="number" min="0" class="form-control" id="updatePriority" name="updatePriority" value="{{ todo.priority }}">
+                                </td>
                                 <td width="60%">
                                     <input type="text" class="form-control" id="updateTitle" name="updateTitle" value="{{ todo.title }}">
                                 </td>

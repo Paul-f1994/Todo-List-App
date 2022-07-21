@@ -15,6 +15,7 @@ class TodoList(ndb.Model):
     complete = ndb.BooleanProperty()
     due = ndb.StringProperty()
     category = ndb.StringProperty()
+    priority = ndb.IntegerProperty()
 
 @app.route("/")
 def index():
@@ -25,6 +26,7 @@ def index():
             if todo.category not in todo_lists:
                 todo_lists[todo.category] = []
             todo_lists[todo.category].append(todo)
+            todo_lists[todo.category].sort(key=lambda x: x.priority, reverse=False)
         return render_template("index.html", todo_lists=todo_lists, colors=colors)
 
 
@@ -41,12 +43,13 @@ def add():
     title = request.form.get("title")
     due = request.form.get("due")
     category = request.form.get("category")
+    priority = int(request.form.get("priority") if request.form.get("priority").isnumeric() else 3)
     with client.context():
         todo = TodoList.query().order(-TodoList.id).get()
         if todo != None:
-            new_todo = TodoList(id = todo.id + 1, title = title, complete = False, due = due, category = category)
+            new_todo = TodoList(id = todo.id + 1, title = title, complete = False, due = due, category = category, priority = priority)
         else:
-            new_todo = TodoList(id = 0, title = title, complete = False, due = due, category = category)
+            new_todo = TodoList(id = 0, title = title, complete = False, due = due, category = category, priority = priority)
         new_todo.put()
     return redirect(url_for("index"))
 
@@ -61,19 +64,19 @@ def complete(todo_id):
     return redirect(url_for("index"))
 
 
-@app.route("/updateTitleAndDueAndCategory/<string:todo_id>", methods=["POST"])
+@app.route("/updateAll/<string:todo_id>", methods=["POST"])
 def updateDueAndCategory(todo_id):
     todo_id =  int(todo_id)
     title = request.form.get("updateTitle")
     due = request.form.get("updateDue")
     category = request.form.get("updateCategory")
-    print(due)
-    print(category)
+    priority = int(request.form.get("updatePriority") if request.form.get("updatePriority").isnumeric() else 3)
     with client.context():
         todo = TodoList.query().filter(TodoList.id == todo_id).get()
         todo.title = title
         todo.due = due
         todo.category = category
+        todo.priority = priority
         todo.put()
     return redirect(url_for("index"))
 

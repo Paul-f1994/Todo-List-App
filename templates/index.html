@@ -18,6 +18,11 @@
     .category {
         flex-grow: 1
     }
+
+    .gray.btn-info {
+        background-color: gray;
+        border-color: gray;
+    }
 </style>
 
 <head>
@@ -32,7 +37,7 @@
 
 <body>
 
-    <div class="container" style="margin-top: 100px">
+    <div class="container" style="margin-top: 100px; max-width: 1440px">
         <h3>Todo List</h3>
         <hr>
         <form action="/add" method="post">
@@ -63,7 +68,6 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
                     <th scope="col">Title</th>
                     <th scope="col">Status</th>
                     <th scope="col">Update</th>
@@ -81,10 +85,7 @@
                     {% for todo in todo_list %}
                         <tr style="background-color: {{bg_color}}">
                             <form action="/updateTitleAndDueAndCategory/{{ todo.id }}" method="post">
-                                <td width="3%">
-                                    {{ todo.id }}
-                                </td>
-                                <td width="50%">
+                                <td width="60%">
                                     <input type="text" class="form-control" id="updateTitle" name="updateTitle" value="{{ todo.title }}">
                                 </td>
                                 {% if todo.complete == False %}
@@ -97,15 +98,19 @@
                                     </td>
                                 {% endif %}
                                 <td width="2%">
-                                    <a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a>
+                                    {% if todo.complete == False %}
+                                        <a href="/complete/{{ todo.id }}" class="btn btn-info">Done</a>
+                                    {% else %}
+                                        <a href="/complete/{{ todo.id }}" class="btn btn-info gray">Undo</a>
+                                    {% endif %}
                                 </td>
-                                <td width="20%">
+                                <td width="15%">
                                     <input type="text" class="form-control" id="updateDue" name="updateDue" value="{{ todo.due }}">
                                 </td>
-                                <td width="20%">
+                                <td width="15%">
                                     <input type="text" class="form-control" id="updateCategory" name="updateCategory" value="{{ todo.category }}">
                                 </td>
-                                <td width="2%">
+                                <td width="5%">
                                     <a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a>
                                 </td>
                                 <input type="submit" style="display: none" />

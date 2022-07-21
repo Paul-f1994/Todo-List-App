@@ -12,6 +12,9 @@
     .due {
         flex-grow:1
     }
+    .category {
+        flex-grow:1
+    }
 </style>
 <head>
     <meta charset="UTF-8">
@@ -34,6 +37,10 @@
                     <label for="title">Todo Title</label>
                     <input type="text" class="form-control" id="title" name="title" placeholder="Enter Todo..."><br>
                 </div>
+                <div class="category">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category" placeholder="Optional"><br>
+                </div>
                 <div class="due">
                     <label for="due">Due</label>
                     <input type="text" class="form-control" id="due" name="due" placeholder="Optional"><br>
@@ -55,6 +62,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Update</th>
                 <th scope="col">Due</th>
+                <th scope="col">Category</th>
                 <th scope="col">Delete</th>
             </tr>
             </thead>
@@ -70,6 +78,7 @@
                     {% endif %}
                     <td><a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a></td>
                     <th scope="row">{{ todo.due }}</th>
+                    <th scope="row">{{ todo.category }}</th>
                     <td><a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a></td>
                 </tr>
             {% endfor %}

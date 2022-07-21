@@ -1,4 +1,5 @@
 import os
+from unicodedata import category
 from flask import Flask, render_template, request, redirect, url_for
 from google.cloud import ndb
 
@@ -12,6 +13,7 @@ class TodoList(ndb.Model):
     title = ndb.StringProperty()
     complete = ndb.BooleanProperty()
     due = ndb.StringProperty()
+    category = ndb.StringProperty()
 
 @app.route("/")
 def index():
@@ -40,12 +42,13 @@ def init():
 def add():
     title = request.form.get("title")
     due = request.form.get("due")
+    category = request.form.get("category")
     with client.context():
         todo = TodoList.query().order(-TodoList.id).get()
         if todo != None:
-            new_todo = TodoList(id = todo.id + 1, title = title, complete = False, due = due)
+            new_todo = TodoList(id = todo.id + 1, title = title, complete = False, due = due, category = category)
         else:
-            new_todo = TodoList(id = 0, title = title, complete = False, due = due)
+            new_todo = TodoList(id = 0, title = title, complete = False, due = due, category = category)
         new_todo.put()
         return redirect(url_for("index"))
 

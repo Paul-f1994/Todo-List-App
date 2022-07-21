@@ -77,8 +77,15 @@
                         <td><span class="badge badge-success">Completed</span></td>
                     {% endif %}
                     <td><a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a></td>
-                    <th scope="row">{{ todo.due }}</th>
-                    <th scope="row">{{ todo.category }}</th>
+                    <form action="/updateDueAndCategory/{{ todo.id }}" method="post">
+                        <th scope="row">
+                            <input type="text" class="form-control" id="updateDue" name="updateDue" value={{ todo.due }}>
+                        </th>
+                        <th scope="row">
+                            <input type="text" class="form-control" id="updateCategory" name="updateCategory" value={{ todo.category }}>
+                        </th>
+                        <input type="submit" style="display: none" />
+                    </form>
                     <td><a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a></td>
                 </tr>
             {% endfor %}

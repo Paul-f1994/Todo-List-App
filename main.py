@@ -36,7 +36,7 @@ def init():
         # ndb.delete_multi(
         #     TodoList.query().fetch(keys_only=True)
         # )
-        return redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 @app.route("/add", methods=["POST"])
 def add():
@@ -50,7 +50,7 @@ def add():
         else:
             new_todo = TodoList(id = 0, title = title, complete = False, due = due, category = category)
         new_todo.put()
-        return redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 
 @app.route("/complete/<string:todo_id>")
@@ -60,7 +60,22 @@ def complete(todo_id):
         todo = TodoList.query().filter(TodoList.id == todo_id).get()
         todo.complete = not todo.complete
         todo.put()
-        return redirect(url_for("index"))
+    return redirect(url_for("index"))
+
+
+@app.route("/updateDueAndCategory/<string:todo_id>", methods=["POST"])
+def updateDueAndCategory(todo_id):
+    todo_id =  int(todo_id)
+    due = request.form.get("updateDue")
+    category = request.form.get("updateCategory")
+    print(due)
+    print(category)
+    with client.context():
+        todo = TodoList.query().filter(TodoList.id == todo_id).get()
+        todo.due = due
+        todo.category = category
+        todo.put()
+    return redirect(url_for("index"))
 
 
 @app.route("/delete/<string:todo_id>")
@@ -69,7 +84,7 @@ def delete(todo_id):
     with client.context():
         todo = TodoList.query().filter(TodoList.id == todo_id).get()
         todo.key.delete()
-        return redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     client

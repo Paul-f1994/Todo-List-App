@@ -80,26 +80,26 @@
                 <tbody>
                     {% for todo in todo_list %}
                         <tr style="background-color: {{bg_color}}">
-                            <td>{{ todo.id }}</td>
-                            <td>{{ todo.title }}</td>
-                            {% if todo.complete == False %}
-                                <td><span class="badge badge-danger">Not Complete</span></td>
-                            {% else %}
-                                <td><span class="badge badge-success">Completed</span></td>
-                            {% endif %}
-                            <td><a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a></td>
-                            <form action="/updateDueAndCategory/{{ todo.id }}" method="post">
+                            <form action="/updateTitleAndDueAndCategory/{{ todo.id }}" method="post">
+                                <td>{{ todo.id }}</td>
                                 <td>
-                                    <input type="text" class="form-control" id="updateDue" name="updateDue" value={{ todo.due
-                                        }}>
+                                    <input type="text" class="form-control" id="updateTitle" name="updateTitle" value={{ todo.title }}>
+                                </td>
+                                {% if todo.complete == False %}
+                                    <td><span class="badge badge-danger">Not Complete</span></td>
+                                {% else %}
+                                    <td><span class="badge badge-success">Completed</span></td>
+                                {% endif %}
+                                <td><a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a></td>
+                                <td>
+                                    <input type="text" class="form-control" id="updateDue" name="updateDue" value={{ todo.due }}>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="updateCategory" name="updateCategory" value={{
-                                        todo.category }}>
+                                    <input type="text" class="form-control" id="updateCategory" name="updateCategory" value={{ todo.category }}>
                                 </td>
+                                <td><a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a></td>
                                 <input type="submit" style="display: none" />
                             </form>
-                            <td><a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

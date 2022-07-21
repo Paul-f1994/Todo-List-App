@@ -1,5 +1,4 @@
 import os
-from unicodedata import category
 from flask import Flask, render_template, request, redirect, url_for
 from google.cloud import ndb
 
@@ -29,22 +28,12 @@ def index():
         return render_template("index.html", todo_lists=todo_lists, colors=colors)
 
 
-@app.route("/init")
+@app.route("/clear")
 def init():
     with client.context():
-        todoItem0 = TodoList(id = 0,
-                        title = "buy shoes",
-                        complete = False,
-                        category = "c1")
-        todoItem0.put()
-        todoItem1 = TodoList(id = 1,
-                        title = "study",
-                        complete = False,
-                        category = "c2")
-        todoItem1.put()
-        # ndb.delete_multi(
-        #     TodoList.query().fetch(keys_only=True)
-        # )
+        ndb.delete_multi(
+            TodoList.query().fetch(keys_only=True)
+        )
     return redirect(url_for("index"))
 
 @app.route("/add", methods=["POST"])
@@ -72,15 +61,17 @@ def complete(todo_id):
     return redirect(url_for("index"))
 
 
-@app.route("/updateDueAndCategory/<string:todo_id>", methods=["POST"])
+@app.route("/updateTitleAndDueAndCategory/<string:todo_id>", methods=["POST"])
 def updateDueAndCategory(todo_id):
     todo_id =  int(todo_id)
+    title = request.form.get("updateTitle")
     due = request.form.get("updateDue")
     category = request.form.get("updateCategory")
     print(due)
     print(category)
     with client.context():
         todo = TodoList.query().filter(TodoList.id == todo_id).get()
+        todo.title = title
         todo.due = due
         todo.category = category
         todo.put()

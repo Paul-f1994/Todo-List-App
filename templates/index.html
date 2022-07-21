@@ -55,7 +55,7 @@
                 <button type="submit" class="btn btn-danger">Add</button>
             </div>
         </form>
-        {% if todo_list == [] %}
+        {% if todo_lists == {} %}
         <div class="alert alert-warning" role="alert">
             No Todo available
         </div>
@@ -81,23 +81,33 @@
                     {% for todo in todo_list %}
                         <tr style="background-color: {{bg_color}}">
                             <form action="/updateTitleAndDueAndCategory/{{ todo.id }}" method="post">
-                                <td>{{ todo.id }}</td>
-                                <td>
-                                    <input type="text" class="form-control" id="updateTitle" name="updateTitle" value={{ todo.title }}>
+                                <td width="3%">
+                                    {{ todo.id }}
+                                </td>
+                                <td width="50%">
+                                    <input type="text" class="form-control" id="updateTitle" name="updateTitle" value="{{ todo.title }}">
                                 </td>
                                 {% if todo.complete == False %}
-                                    <td><span class="badge badge-danger">Not Complete</span></td>
+                                    <td width="3%">
+                                        <span class="badge badge-danger">Not Complete</span>
+                                    </td>
                                 {% else %}
-                                    <td><span class="badge badge-success">Completed</span></td>
+                                    <td width="3%">
+                                        <span class="badge badge-success">Completed</span>
+                                    </td>
                                 {% endif %}
-                                <td><a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a></td>
-                                <td>
-                                    <input type="text" class="form-control" id="updateDue" name="updateDue" value={{ todo.due }}>
+                                <td width="2%">
+                                    <a href="/complete/{{ todo.id }}" class="btn btn-info">Update</a>
                                 </td>
-                                <td>
-                                    <input type="text" class="form-control" id="updateCategory" name="updateCategory" value={{ todo.category }}>
+                                <td width="20%">
+                                    <input type="text" class="form-control" id="updateDue" name="updateDue" value="{{ todo.due }}">
                                 </td>
-                                <td><a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a></td>
+                                <td width="20%">
+                                    <input type="text" class="form-control" id="updateCategory" name="updateCategory" value="{{ todo.category }}">
+                                </td>
+                                <td width="2%">
+                                    <a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a>
+                                </td>
                                 <input type="submit" style="display: none" />
                             </form>
                         </tr>

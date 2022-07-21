@@ -8,6 +8,8 @@ PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__)
 
+colors = ["#EBF6FA", "#FAE8E8", "#D3E3D6", "#FBEFE3", "#D9E6EC", "#ECDCDC", "#E3E2E1"]
+
 class TodoList(ndb.Model):
     id = ndb.IntegerProperty()
     title = ndb.StringProperty()
@@ -18,8 +20,13 @@ class TodoList(ndb.Model):
 @app.route("/")
 def index():
     with client.context():
-        todo_list = TodoList.query().order(TodoList.id)
-        return render_template("index.html", todo_list=todo_list)
+        todo_lists = {}
+        todos = TodoList.query().order(TodoList.id)
+        for todo in todos:
+            if todo.category not in todo_lists:
+                todo_lists[todo.category] = []
+            todo_lists[todo.category].append(todo)
+        return render_template("index.html", todo_lists=todo_lists, colors=colors)
 
 
 @app.route("/init")
@@ -27,11 +34,13 @@ def init():
     with client.context():
         todoItem0 = TodoList(id = 0,
                         title = "buy shoes",
-                        complete = False)
+                        complete = False,
+                        category = "c1")
         todoItem0.put()
         todoItem1 = TodoList(id = 1,
                         title = "study",
-                        complete = False)
+                        complete = False,
+                        category = "c2")
         todoItem1.put()
         # ndb.delete_multi(
         #     TodoList.query().fetch(keys_only=True)
@@ -80,7 +89,7 @@ def updateDueAndCategory(todo_id):
 
 @app.route("/delete/<string:todo_id>")
 def delete(todo_id):
-    todo_id =  int(todo_id)
+    todo_id = int(todo_id)
     with client.context():
         todo = TodoList.query().filter(TodoList.id == todo_id).get()
         todo.key.delete()
